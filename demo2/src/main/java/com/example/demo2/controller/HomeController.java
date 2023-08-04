@@ -12,8 +12,7 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/create")
-    public String showList(){
-        return "customer/create";
-    }
+
+
+
 }
