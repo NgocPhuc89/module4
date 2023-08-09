@@ -4,3 +4,18 @@
 h1{
     color: cadetblue;
 }
+h4{
+    height: 120px;
+    width: 100%;
+}
+#question{
+    height: 350px;
+    width: 100px;
+}
+#submit{
+    background-color: white;
+    padding-top: 300px;
+}
+.question-item {
+    display: none;
+}

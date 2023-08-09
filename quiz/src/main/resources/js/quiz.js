@@ -1,7 +1,7 @@
 
 const API_QUIZ = 'http://localhost:8080/api/quiz'
 let questions;
-
+let submitBtn = ''
 function renderQuiz(){
     $.ajax({
         url: API_QUIZ,
@@ -13,10 +13,15 @@ function renderQuiz(){
         let str = '';
         data.forEach(quiz => {
             questions = quiz.questions;
-            question = questions[0]
-            let ques = `                       `;
-            // quiz.questions.forEach((question,index) => {
+            console.log(questions.length)
+
+
+
+            // question = questions[0]
+            let ques = ``;
+            quiz.questions.forEach((question,index) => {
                 let ans = '';
+
                 question.answers.forEach(answer => {
                     if(question.type === "radio"){
                         ans += ` <div class="form-check">
@@ -36,70 +41,48 @@ function renderQuiz(){
                     }
                 })
 
-                ques += ` <h4 class="alert alert-primary disabled">${1}.${question.content}</h4>
-            ${ans}
+                ques += `
+                <div id="question-${index}" class="question-item">
+                    <h4 class="alert alert-primary disabled">${index+1}.${question.content}</h4>
+                     ${ans}
+                      <div  style="text-align: end">
+                      <button onclick="prev(${index})" class="btn btn-primary">Prev</button>
+                        <button onclick="next(${index})" class="btn btn-primary">Next</button>
+  </div>
+                </div>
+                 
                     `
-            // })
+            })
             str += ` <h1 align="center">${quiz.content}</h1>
                      <div id="a">
                   <div id="questions">
                      ${ques}
-     
+                       
       </div>
-  </div> 
- <div  style="text-align: end">
-   <button onclick="show(1)" class="btn btn-primary">Next</button>
-  </div>`
+  </div>
+ `
         })
         document.getElementById('quiz').innerHTML = str;
+        document.getElementById("question-0").style.display = "block"
     })
 
 }
 renderQuiz();
 
-function show(index){
-    question = questions[index];
-    let prevN = +index - 1;
-    let nextN = +index + 1;
-    let prevBtn = ''
-    if(index != 0){
-        prevBtn = `<button onclick="show(${prevN})" class="btn btn-primary">Prev</button>`
-    }
-    let nextBtn = ''
-    if(index < questions.length - 1){
-        nextBtn = `<button onclick="show(${nextN})" class="btn btn-primary">Next</button>`
-    }
-    let ques = ``;
+function prev(index){
+    let next = index-1;
 
-    let ans = '';
-    question.answers.forEach(answer => {
-        if(question.type === "radio"){
-            ans += ` <div class="form-check">
-              <input class="form-check-input" value="${answer.content}" type="radio" name="ques-${question.id}" id="answer-${answer.id}">
-              <label class="form-check-label" for="flexRadioDefault1">
-                  ${answer.title}.${answer.content}
-              </label>
-          </div>`
-        }
-        else {
-            ans += ` <div class="form-check">
-              <input class="form-check-input" value="${answer.content}" type="checkbox" name="ques-${question.id}" id="answer-${answer.id}">
-              <label class="form-check-label" for="flexRadioDefault1">
-                  ${answer.title}.${answer.content}
-              </label>
-          </div>`
-        }
-    })
+    document.getElementById("question-"+index).style.display = "none"
 
-    ques += ` <h4 class="alert alert-primary disabled">${index+1}.${question.content}</h4>
-            ${ans}
-             <div  style="text-align: end">
-            ${prevBtn}
-            ${nextBtn}
-            </div>
-          `
+    document.getElementById("question-"+next).style.display = "block"
+}
 
-    document.getElementById("questions").innerHTML = ques
+function next(index){
+    let next = index+1;
+
+    document.getElementById("question-"+index).style.display = "none"
+
+    document.getElementById("question-"+next).style.display = "block"
 }
 
 function submit(){
