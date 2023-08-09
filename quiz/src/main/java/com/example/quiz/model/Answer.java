@@ -22,4 +22,5 @@ public class Answer {
     private Question question;
 
     private boolean status;
+    private String title;
 }
